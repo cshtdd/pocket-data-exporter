@@ -19,3 +19,7 @@ EOF
 ```bash
 dotenv ruby main.rb
 ```
+
+# Docs  
+- https://getpocket.com/developer/docs/v3/retrieve
+- https://getpocket.com/connected_applications
