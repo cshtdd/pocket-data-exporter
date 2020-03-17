@@ -1,7 +1,7 @@
 require 'httparty'
 require 'json'
 
-puts 'Export Pocket Articles'  
+puts 'Exporting Pocket Articles...'
 
 consumer_key = ENV['CONSUMER_KEY'] || ''
 puts "Consumer Key: #{consumer_key}"
@@ -11,7 +11,7 @@ if consumer_key.empty?
   exit 1
 end
 
-puts 'Retrieving auth token'
+puts 'Retrieving auth token...'
 
 token_response = HTTParty.post(
   'https://getpocket.com/v3/oauth/request',
@@ -32,6 +32,9 @@ if token_response.code != 200
   exit 1
 end
 
-puts JSON.parse(token_response.body)['code']
+request_token = JSON.parse(token_response.body)['code']
+puts "Request Token: #{request_token}"
+
+
 
 puts 'Export Completed'
