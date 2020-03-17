@@ -34,6 +34,28 @@ class Pocket
     log_buffer(debug_log)
   end
 
+  def read_access_token(request_token)
+    debug_log = StringIO.new
+
+    response = HTTParty.post(
+      'https://getpocket.com/v3/oauth/authorize',
+      debug_output: debug_log,
+      headers: json_request_headers,
+      body: {
+        consumer_key: consumer_key,
+        code: request_token
+      }.to_json
+    )
+
+    if response.code != 200
+      ''
+    else
+      JSON.parse(response.body)['access_token']
+    end
+  ensure
+    log_buffer(debug_log)
+  end
+
   private
 
   def json_request_headers

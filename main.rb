@@ -32,12 +32,21 @@ get '/' do
 end
 
 get '/token/:code' do
-  code = params[:code] || ''
+  request_token = params[:code] || ''
 
-  puts "Auth Request Code: #{code}"
+  puts "Auth Request Code: #{request_token}"
 
-  status 200
-  body ''
+  access_token = pocket_api.read_access_token(request_token)
+
+  if access_token.empty?
+    status 500
+    body 'Error Reading Access Token'
+  else
+    puts "Access Token: #{access_token}" # TODO: remove this log line for it is sensitive
+
+    status 200
+    body ''
+  end
 end
 
 puts 'Starting Export...'
