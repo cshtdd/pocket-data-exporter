@@ -13,50 +13,41 @@ class Pocket
   end
 
   def read_request_token(redirect_url = 'EMPTY')
-    debug_log = StringIO.new
-
-    response = HTTParty.post(
-      'https://getpocket.com/v3/oauth/request',
-      debug_output: debug_log,
-      headers: json_request_headers,
-      body: {
-        consumer_key: consumer_key,
-        redirect_uri: redirect_url
-      }.to_json
-    )
-
+    response = json_post_v3('oauth/request',
+                            { consumer_key: consumer_key, redirect_uri: redirect_url })
     if response.code != 200
       ''
     else
       JSON.parse(response.body)['code']
     end
-  ensure
-    log_buffer(debug_log)
   end
 
   def read_access_token(request_token)
-    debug_log = StringIO.new
-
-    response = HTTParty.post(
-      'https://getpocket.com/v3/oauth/authorize',
-      debug_output: debug_log,
-      headers: json_request_headers,
-      body: {
-        consumer_key: consumer_key,
-        code: request_token
-      }.to_json
-    )
-
+    response = json_post_v3('oauth/authorize',
+                            { consumer_key: consumer_key, code: request_token })
     if response.code != 200
       ''
     else
       JSON.parse(response.body)['access_token']
     end
-  ensure
-    log_buffer(debug_log)
   end
 
   private
+
+  def json_post_v3(path, body)
+    debug_log = StringIO.new
+
+    url = "https://getpocket.com/v3/#{path}"
+
+    HTTParty.post(
+      url,
+      debug_output: debug_log,
+      headers: json_request_headers,
+      body: body.to_json
+    )
+  ensure
+    log_buffer(debug_log)
+  end
 
   def json_request_headers
     {
