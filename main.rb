@@ -32,20 +32,33 @@ get '/' do
 end
 
 get '/token/:code' do
+  content_type 'application/json'
   request_token = params[:code] || ''
 
-  puts "Auth Request Code: #{request_token}"
-
-  access_token = pocket_api.read_access_token(request_token)
-
-  if access_token.empty?
-    status 500
-    body 'Error Reading Access Token'
+  if request_token.empty?
+    status 400
+    body({ msg: 'Invalid Token' }.to_json)
   else
-    puts "Access Token: #{access_token}" # TODO: remove this log line for it is sensitive
+    puts "Auth Request Code: #{request_token}"
 
-    status 200
-    body ''
+    access_token = pocket_api.read_access_token(request_token)
+
+    if access_token.empty?
+      status 400
+      body({ msg: 'Error Reading Access Token' }.to_json)
+    else
+      puts 'Access Token: ***********'
+
+      articles_json = pocket_api.read_all_articles_json(access_token)
+
+      if articles_json.empty?
+        status 400
+        body({ msg: 'Error Reading Articles' }.to_json)
+      end
+
+      status 200
+      body articles_json
+    end
   end
 end
 

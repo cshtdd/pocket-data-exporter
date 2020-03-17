@@ -32,6 +32,23 @@ class Pocket
     end
   end
 
+  def read_all_articles_json(access_token)
+    response = json_post_v3(
+      'get',
+      {
+        consumer_key: consumer_key,
+        access_token: access_token,
+        contentType: 'article',
+        detailType: 'simple'
+      })
+
+    if response.code != 200
+      ''
+    else
+      response.body
+    end
+  end
+
   private
 
   def json_post_v3(path, body)
