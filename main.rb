@@ -1,4 +1,5 @@
 require 'httparty'
+require 'json'
 
 puts 'Export Pocket Articles'  
 
@@ -17,15 +18,20 @@ token_response = HTTParty.post(
   debug_output: STDOUT,
   headers: {
     'User-Agent': 'Pocket-Exporter',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    'X-Accept': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/json; charset=UTF-8',
+    'X-Accept': 'application/json'
   },
   body: {
     consumer_key: consumer_key,
     redirect_uri: 'http://localhost:8080/auth'
-  }
+  }.to_json
 )
 
-puts token_response
+if token_response.code != 200
+  puts 'ERROR: Could not get request token'
+  exit 1
+end
+
+puts JSON.parse(token_response.body)['code']
 
 puts 'Export Completed'
