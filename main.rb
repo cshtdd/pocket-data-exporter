@@ -33,9 +33,6 @@ get '/' do
 end
 
 get '/token/:code' do
-  # puts 'Auth Completed'
-  # puts request.query_string
-  # puts request.body.string
   code = params[:code] || ''
 
   puts "Auth Request Code: #{code}"
