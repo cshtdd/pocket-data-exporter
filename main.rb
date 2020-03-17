@@ -17,15 +17,14 @@ end
 
 puts 'Starting web server...'
 
-get '/token' do
-  status 200
-  body ''
-end
+get '/token/:code' do
+  # puts 'Auth Completed'
+  # puts request.query_string
+  # puts request.body.string
+  code = params[:code] || ''
 
-get '/authCompleted' do
-  puts 'Auth Completed'
-  puts request.query_string
-  puts request.body.string
+  puts "Auth Request Code: #{code}"
+
   status 200
   body ''
 end
@@ -35,7 +34,7 @@ puts 'Retrieving auth token...'
 
 token_response = HTTParty.post(
   'https://getpocket.com/v3/oauth/request',
-  debug_output: STDOUT,
+  # debug_output: STDOUT,
   headers: {
     'User-Agent': 'Pocket-Exporter',
     'Content-Type': 'application/json; charset=UTF-8',
@@ -56,7 +55,7 @@ request_token = JSON.parse(token_response.body)['code']
 puts "Request Token: #{request_token}"
 
 
-auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{server_url}/authCompleted"
+auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{server_url}/token/#{request_token}"
 Launchy.open(auth_url)
 
 
