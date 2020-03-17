@@ -1,9 +1,8 @@
-require 'httparty'
-require 'json'
 require 'launchy'
 require 'sinatra'
+require './lib/pocket'
 
-puts 'Exporting Pocket Articles...'
+puts 'Initializing...'
 
 consumer_key = ENV['CONSUMER_KEY'] || ''
 puts "Consumer Key: #{consumer_key}"
@@ -15,7 +14,24 @@ if consumer_key.empty?
   exit 1
 end
 
+pocket_api = Pocket.new(consumer_key)
+pocket_api.is_debug = true
+
 puts 'Starting web server...'
+
+get '/' do
+  puts 'Retrieving auth token...'
+  redirect_url = "#{server_url}/token"
+  request_token = pocket_api.read_request_token(redirect_url)
+
+  if request_token.empty?
+    status 500
+    body 'Error Reading Request Token'
+  else
+    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{server_url}/token/#{request_token}"
+    redirect auth_url
+  end
+end
 
 get '/token/:code' do
   # puts 'Auth Completed'
@@ -29,35 +45,6 @@ get '/token/:code' do
   body ''
 end
 
+puts 'Starting Export...'
+Launchy.open(server_url)
 
-puts 'Retrieving auth token...'
-
-token_response = HTTParty.post(
-  'https://getpocket.com/v3/oauth/request',
-  # debug_output: STDOUT,
-  headers: {
-    'User-Agent': 'Pocket-Exporter',
-    'Content-Type': 'application/json; charset=UTF-8',
-    'X-Accept': 'application/json'
-  },
-  body: {
-    consumer_key: consumer_key,
-    redirect_uri: "#{server_url}/token"
-  }.to_json
-)
-
-if token_response.code != 200
-  puts 'ERROR: Could not get request token'
-  exit 1
-end
-
-request_token = JSON.parse(token_response.body)['code']
-puts "Request Token: #{request_token}"
-
-
-auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{server_url}/token/#{request_token}"
-Launchy.open(auth_url)
-
-
-
-puts 'Export Completed'
