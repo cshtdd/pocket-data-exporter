@@ -39,8 +39,9 @@ class Pocket
         consumer_key: consumer_key,
         access_token: access_token,
         contentType: 'article',
-        detailType: 'simple'
-      })
+        detailType: 'complete'
+      }
+    )
 
     if response.code != 200
       ''
