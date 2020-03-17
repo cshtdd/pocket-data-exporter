@@ -20,8 +20,7 @@ puts 'Starting web server...'
 
 get '/' do
   puts 'Retrieving auth token...'
-  redirect_url = "#{config.server_url}/token"
-  request_token = pocket_api.read_request_token(redirect_url)
+  request_token = pocket_api.read_request_token
 
   if request_token.empty?
     status 500

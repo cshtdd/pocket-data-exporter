@@ -12,7 +12,7 @@ class Pocket
     self.consumer_key = consumer_key
   end
 
-  def read_request_token(redirect_url)
+  def read_request_token(redirect_url = 'EMPTY')
     debug_log = StringIO.new
 
     response = HTTParty.post(
