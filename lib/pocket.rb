@@ -46,7 +46,7 @@ class Pocket
       body: body.to_json
     )
   ensure
-    log_buffer(debug_log)
+    log_debug_buffer(debug_log)
   end
 
   def json_request_headers
@@ -57,11 +57,15 @@ class Pocket
     }
   end
 
-  def log_buffer(stream)
-    log(stream.string) if is_debug
+  def log_debug_buffer(stream)
+    log_debug(stream.string) if is_debug
+  end
+
+  def log_debug(str)
+    log(str) if is_debug
   end
 
   def log(str)
-    puts(str) if is_debug
+    puts(str)
   end
 end

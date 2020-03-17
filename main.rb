@@ -13,7 +13,7 @@ end
 puts 'Configuration Read'
 
 pocket_api = Pocket.new(config.consumer_key)
-pocket_api.is_debug = true
+# pocket_api.is_debug = true
 puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
