@@ -1,5 +1,6 @@
 require 'httparty'
 require 'json'
+require 'launchy'
 
 puts 'Exporting Pocket Articles...'
 
@@ -36,5 +37,7 @@ request_token = JSON.parse(token_response.body)['code']
 puts "Request Token: #{request_token}"
 
 
+auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=http://localhost:8080/authSuccess"
+Launchy.open(auth_url)
 
 puts 'Export Completed'
