@@ -12,8 +12,7 @@ unless config.valid?
 end
 puts 'Configuration Read'
 
-pocket_api = Pocket.new(config.consumer_key)
-# pocket_api.is_debug = true
+pocket_api = Pocket.new(config.consumer_key, config.debug_enabled)
 puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
@@ -47,7 +46,9 @@ get '/token/:code' do
       status 400
       body({ msg: 'Error Reading Access Token' }.to_json)
     else
-      puts 'Access Token: ***********'
+      log_access_token_value = access_token
+      log_access_token_value = '*************' unless config.debug_enabled
+      puts "Access Token: #{log_access_token_value}"
 
       articles_json = pocket_api.read_all_articles_json(access_token)
 

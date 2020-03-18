@@ -4,10 +4,10 @@ require 'json'
 class Pocket
   attr_accessor :consumer_key
   attr_accessor :user_agent
-  attr_accessor :is_debug
+  attr_accessor :debug_enabled
 
-  def initialize(consumer_key)
-    self.is_debug = false
+  def initialize(consumer_key, debug_enabled = false)
+    self.debug_enabled = debug_enabled
     self.user_agent = 'Pocket-Exporter'
     self.consumer_key = consumer_key
   end
@@ -80,11 +80,11 @@ class Pocket
   end
 
   def log_debug_buffer(stream)
-    log_debug(stream.string) if is_debug
+    log_debug(stream.string) if debug_enabled
   end
 
   def log_debug(str)
-    log(str) if is_debug
+    log(str) if debug_enabled
   end
 
   def log(str)

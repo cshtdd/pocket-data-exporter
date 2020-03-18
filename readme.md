@@ -11,6 +11,7 @@ This is not great when trying to migrate the data to another organized service.
 ```bash
 cat <<EOF >> .env
 CONSUMER_KEY=your-app-consumer-key
+DEBUG=false
 EOF
 ```
 
