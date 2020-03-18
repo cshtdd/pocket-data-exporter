@@ -27,17 +27,24 @@ class Downloader
   end
 
   def save_data(access_token)
-    data = pocket_api_client.read_all_articles_json(access_token)
     url_id = next_id
-    save_in_cache(url_id, access_token)
-    save_in_cache(access_token, url_id)
-    save_in_cache(access_token, data)
 
-    #  TODO return errors or successes
+    data = pocket_api_client.read_all_articles_json(access_token)
+    save_in_storage(url_id, access_token)
+    save_in_storage(access_token, data)
+
+    url_id
   end
 
   def read_data(url_id)
-    # TODO finish this
+    return '' unless storage_contains(url_id)
+
+    access_token = read_from_storage(url_id) || ''
+    return '' if access_token.empty?
+
+    return '' unless storage_contains(access_token)
+
+    read_from_storage(access_token) || ''
   end
 
   private
@@ -46,12 +53,16 @@ class Downloader
     (0...8).map { ('a'..'z').to_a[rand(26)] }.join
   end
 
-  def save_in_cache(key, value)
+  def save_in_storage(key, value)
     @cache.set(key, value, expires_in: 60)
   end
 
-  def cache_contains(key)
+  def storage_contains(key)
     @cache.set?(key)
+  end
+
+  def read_from_storage(key)
+    @cache.get(key)
   end
 
   def debug(msg)
