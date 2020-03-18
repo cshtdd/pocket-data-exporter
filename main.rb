@@ -32,6 +32,39 @@ get '/export/:out_method' do
   end
 end
 
+get '/token_raw_data_json/:code' do
+  content_type 'application/json'
+  request_token = params[:code] || ''
+
+  if request_token.empty?
+    status 400
+    body({ msg: 'Invalid Token' }.to_json)
+  else
+    puts "Auth Request Code: #{request_token}"
+
+    access_token = pocket_api.read_access_token(request_token)
+
+    if access_token.empty?
+      status 400
+      body({ msg: 'Error Reading Access Token' }.to_json)
+    else
+      log_access_token_value = access_token
+      log_access_token_value = '*************' unless config.debug_enabled
+      puts "Access Token: #{log_access_token_value}"
+
+      articles_json = pocket_api.read_all_articles_json(access_token)
+
+      if articles_json.empty?
+        status 400
+        body({ msg: 'Error Reading Articles' }.to_json)
+      end
+
+      status 200
+      body articles_json
+    end
+  end
+end
+
 get '/token_list_by_tags_json/:code' do
   content_type 'application/json'
   request_token = params[:code] || ''
@@ -68,5 +101,5 @@ get '/token_list_by_tags_json/:code' do
 end
 
 puts 'Starting Export...'
-Launchy.open("#{config.server_url}/export/token_list_by_tags_json")
+Launchy.open("#{config.server_url}/export/token_raw_data_json")
 
