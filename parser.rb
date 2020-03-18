@@ -12,8 +12,6 @@ data = JSON.parse(data_str)
 
 articles = data['list']
 
-puts "Articles Count: #{articles.length}"
-
 articles_by_tag = {}
 
 articles.each do |id, info|
@@ -29,6 +27,11 @@ articles.each do |id, info|
 
   # puts tag_info
 end
+
+
+total_count = articles_by_tag.values.flatten.uniq.count
+puts "Total Count: #{total_count}"
+
 
 articles_by_tag.each do |tag, ids|
   puts tag
