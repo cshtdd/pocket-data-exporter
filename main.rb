@@ -19,6 +19,10 @@ puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
 
+get '/' do
+  send_file File.expand_path('index.html', settings.public_dir)
+end
+
 get '/export/:out_method' do
   puts 'Retrieving auth token...'
   out_method = params[:out_method] || ''
@@ -141,5 +145,5 @@ get '/list_by_tags/:code' do
 end
 
 puts 'Starting Export...'
-Launchy.open("#{config.server_url}/export/list_by_tags")
+Launchy.open("#{config.server_url}/")
 
