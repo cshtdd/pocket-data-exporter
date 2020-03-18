@@ -17,7 +17,7 @@ puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
 
-get '/' do
+get '/export' do
   puts 'Retrieving auth token...'
   request_token = pocket_api.read_request_token
 
@@ -64,5 +64,5 @@ get '/token/:code' do
 end
 
 puts 'Starting Export...'
-Launchy.open(config.server_url)
+Launchy.open("#{config.server_url}/export")
 
