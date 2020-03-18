@@ -1,5 +1,5 @@
-require './lib/pocket_parser'
-require './lib/data_formatter'
+require './lib/pocket/parser'
+require './lib/pocket/formatter'
 
 file_path = ARGV[0] || ''
 unless File.exist?(file_path)
@@ -8,7 +8,7 @@ unless File.exist?(file_path)
 end
 
 data_str = File.read(file_path)
-articles_by_tag = PocketParser.articles_by_tag(data_str)
+articles_by_tag = Pocket::Parser.articles_by_tag(data_str)
 
-puts DataFormatter.unique_dict_values_plaintext(articles_by_tag)
-puts DataFormatter.dict_to_plaintext(articles_by_tag)
+puts Pocket::Formatter.unique_dict_values_plaintext(articles_by_tag)
+puts Pocket::Formatter.dict_to_plaintext(articles_by_tag)

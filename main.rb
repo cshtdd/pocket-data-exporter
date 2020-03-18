@@ -1,9 +1,9 @@
 require 'launchy'
 require 'sinatra'
 require './lib/config'
-require './lib/pocket'
-require './lib/pocket_parser'
-require './lib/data_formatter'
+require './lib/pocket/api'
+require './lib/pocket/parser'
+require './lib/pocket/formatter'
 
 puts 'Initializing...'
 
@@ -14,7 +14,7 @@ unless config.valid?
 end
 puts 'Configuration Read'
 
-pocket_api = Pocket.new(config.consumer_key, config.debug_enabled)
+pocket_api = Pocket::Api.new(config.consumer_key, config.debug_enabled)
 puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
@@ -97,7 +97,7 @@ get '/list_by_tags_json/:code' do
         body({ msg: 'Error Reading Articles' }.to_json)
       end
 
-      articles_by_tag = PocketParser.articles_by_tag(articles_json)
+      articles_by_tag = Pocket::Parser.articles_by_tag(articles_json)
 
       status 200
       body articles_by_tag.to_json
@@ -132,11 +132,11 @@ get '/list_by_tags/:code' do
         body 'Error Reading Articles'
       end
 
-      articles_by_tag = PocketParser.articles_by_tag(articles_json)
+      articles_by_tag = Pocket::Parser.articles_by_tag(articles_json)
       response_body = ''
-      response_body << DataFormatter.unique_dict_values_plaintext(articles_by_tag)
+      response_body << Pocket::Formatter.unique_dict_values_plaintext(articles_by_tag)
       response_body << "\r\n"
-      response_body << DataFormatter.dict_to_plaintext(articles_by_tag)
+      response_body << Pocket::Formatter.dict_to_plaintext(articles_by_tag)
 
       status 200
       body response_body
