@@ -15,6 +15,8 @@ articles = data['list']
 articles_by_tag = {}
 
 articles.each do |id, info|
+  next unless info['status'] == '0'
+
   tag_info = info['tags'] || { 'untagged items': nil }
 
   tag_info.keys.each do |tag|
@@ -24,8 +26,6 @@ articles.each do |id, info|
 
     articles_by_tag[tag] << id
   end
-
-  # puts tag_info
 end
 
 
