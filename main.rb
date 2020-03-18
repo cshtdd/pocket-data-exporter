@@ -28,7 +28,7 @@ end
 
 get '/export/:out_method' do
   puts 'Retrieving auth token...'
-  out_method = params[:out_method] || ''
+  out_method = params[:out_method]
   request_token = pocket_api.read_request_token
 
   if request_token.empty?
@@ -40,8 +40,8 @@ get '/export/:out_method' do
 end
 
 get '/download/:request_token/:out_method/' do
-  request_token = params[:request_token] || ''
-  url_suffix = params[:out_method] || ''
+  request_token = params[:request_token]
+  url_suffix = params[:out_method]
   access_token_info = downloader.read_access_token(request_token)
 
   if access_token_info[:error]
@@ -60,7 +60,7 @@ end
 
 get '/data/:url_id/data.json' do
   content_type 'application/json'
-  article_data_json = downloader.read_data(params[:url_id] || '')
+  article_data_json = downloader.read_data params[:url_id]
 
   if article_data_json.empty?
     status 404
@@ -71,7 +71,7 @@ end
 
 get '/data/:url_id/list_by_tag.json' do
   content_type 'application/json'
-  article_data_json = downloader.read_data(params[:url_id] || '')
+  article_data_json = downloader.read_data params[:url_id]
 
   if article_data_json.empty?
     status 404
@@ -83,7 +83,7 @@ end
 
 get '/data/:url_id/list_by_tag.txt' do
   content_type 'text/plain'
-  article_data_json = downloader.read_data(params[:url_id] || '')
+  article_data_json = downloader.read_data params[:url_id]
 
   if article_data_json.empty?
     status 404
