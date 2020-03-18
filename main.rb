@@ -33,7 +33,7 @@ get '/export/:out_method' do
   end
 end
 
-get '/token_raw_data_json/:code' do
+get '/raw_data_json/:code' do
   content_type 'application/json'
   request_token = params[:code] || ''
 
@@ -66,7 +66,7 @@ get '/token_raw_data_json/:code' do
   end
 end
 
-get '/token_list_by_tags_json/:code' do
+get '/list_by_tags_json/:code' do
   content_type 'application/json'
   request_token = params[:code] || ''
 
@@ -101,7 +101,7 @@ get '/token_list_by_tags_json/:code' do
   end
 end
 
-get '/token_list_by_tags/:code' do
+get '/list_by_tags/:code' do
   content_type 'text/plain'
   request_token = params[:code] || ''
 
@@ -141,5 +141,5 @@ get '/token_list_by_tags/:code' do
 end
 
 puts 'Starting Export...'
-Launchy.open("#{config.server_url}/export/token_list_by_tags")
+Launchy.open("#{config.server_url}/export/list_by_tags")
 
