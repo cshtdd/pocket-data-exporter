@@ -58,9 +58,9 @@ get '/download/:request_token/:out_method/' do
   end
 end
 
-get '/data/:url_id/data.json' do
+get '/data/:id/data.json' do
   content_type 'application/json'
-  article_data_json = downloader.read_data params[:url_id]
+  article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
@@ -69,9 +69,9 @@ get '/data/:url_id/data.json' do
   end
 end
 
-get '/data/:url_id/list_by_tag.json' do
+get '/data/:id/list_by_tag.json' do
   content_type 'application/json'
-  article_data_json = downloader.read_data params[:url_id]
+  article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
@@ -81,9 +81,9 @@ get '/data/:url_id/list_by_tag.json' do
   end
 end
 
-get '/data/:url_id/list_by_tag.txt' do
+get '/data/:id/list_by_tag.txt' do
   content_type 'text/plain'
-  article_data_json = downloader.read_data params[:url_id]
+  article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
