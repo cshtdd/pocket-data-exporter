@@ -33,13 +33,17 @@ class Pocket
   end
 
   def read_all_articles_json(access_token)
+    twenty_years = (20 * 365 * 24 * 60 * 60)
+    twenty_years_ago = (Time.now.utc - twenty_years).to_i
+
     response = json_post_v3(
       'get',
       {
         consumer_key: consumer_key,
         access_token: access_token,
-        contentType: 'article',
-        detailType: 'complete'
+        # contentType: 'article',
+        detailType: 'complete',
+        since: twenty_years_ago
       }
     )
 
