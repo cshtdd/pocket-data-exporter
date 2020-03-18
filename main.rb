@@ -26,22 +26,22 @@ get '/' do
   send_file File.expand_path('index.html', settings.public_dir)
 end
 
-get '/export/:out_method' do
+get '/export/:data_method' do
   puts 'Retrieving auth token...'
-  out_method = params[:out_method]
+  data_method = params[:data_method]
   request_token = pocket_api.read_request_token
 
   if request_token.empty?
     [400, 'Error Reading Request Token']
   else
-    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/download/#{request_token}/#{out_method}/"
+    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/auth/#{request_token}/#{data_method}/"
     redirect auth_url
   end
 end
 
-get '/download/:request_token/:out_method/' do
+get '/auth/:request_token/:data_method/' do
   request_token = params[:request_token]
-  url_suffix = params[:out_method]
+  url_suffix = params[:data_method]
   access_token_info = downloader.read_access_token(request_token)
 
   if access_token_info[:error]
