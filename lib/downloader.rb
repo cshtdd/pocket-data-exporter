@@ -28,10 +28,16 @@ class Downloader
   end
 
   def save_data(access_token)
-    url_id = next_id
+    access_token_reverse_key_id = "AT-#{access_token}"
+    if storage_driver.contains(access_token_reverse_key_id)
+      existing_url_id = storage_driver.read(access_token_reverse_key_id)
+      return existing_url_id if storage_driver.contains(existing_url_id)
+    end
 
+    url_id = next_id
     data = pocket_api_client.read_all_articles_json(access_token)
     storage_driver.save(url_id, access_token)
+    storage_driver.save(access_token_reverse_key_id, url_id)
     storage_driver.save(access_token, data)
 
     url_id
