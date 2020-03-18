@@ -144,6 +144,5 @@ get '/list_by_tags/:code' do
   end
 end
 
-puts 'Starting Export...'
-Launchy.open("#{config.server_url}/")
-
+puts 'Webserver Ready'
+puts "Open #{config.server_url} to start the export"
