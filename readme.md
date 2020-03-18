@@ -21,6 +21,14 @@ EOF
 dotenv ruby main.rb
 ```
 
+4- Follow the instructions. Download the json file  
+
+5- Get a list of articles per tag  
+
+```bash
+ruby parser.rb ~/Downloads/pocket_data.json
+```
+
 # Docs  
 - https://getpocket.com/developer/docs/v3/retrieve
 - https://getpocket.com/connected_applications
