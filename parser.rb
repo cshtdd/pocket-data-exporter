@@ -16,6 +16,8 @@ articles_by_tag = {}
 
 articles.each do |id, info|
   next unless info['status'] == '0'
+  next unless info.include?('resolved_url')
+  next if info['resolved_url'].nil? || info['resolved_url'].empty?
 
   tag_info = info['tags'] || { 'untagged items': nil }
 
@@ -37,9 +39,6 @@ articles_by_tag.each do |tag, ids|
   puts tag
 
   ids.each do |id|
-    article_info = articles[id]
-    if article_info.include?('resolved_url')
-      puts '   ' + article_info['resolved_url']
-    end
+    puts '   ' + articles[id]['resolved_url']
   end
 end
