@@ -18,20 +18,21 @@ puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
 
-get '/export' do
+get '/export/:out_method' do
   puts 'Retrieving auth token...'
+  out_method = params[:out_method] || ''
   request_token = pocket_api.read_request_token
 
   if request_token.empty?
     status 500
     body 'Error Reading Request Token'
   else
-    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/token/#{request_token}"
+    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/#{out_method}/#{request_token}"
     redirect auth_url
   end
 end
 
-get '/token/:code' do
+get '/token_list_by_tags_json/:code' do
   content_type 'application/json'
   request_token = params[:code] || ''
 
@@ -67,5 +68,5 @@ get '/token/:code' do
 end
 
 puts 'Starting Export...'
-Launchy.open("#{config.server_url}/export")
+Launchy.open("#{config.server_url}/export/token_list_by_tags_json")
 
