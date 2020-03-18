@@ -102,7 +102,7 @@ get '/token_list_by_tags_json/:code' do
 end
 
 get '/token_list_by_tags/:code' do
-  content_type 'text/html'
+  content_type 'text/plain'
   request_token = params[:code] || ''
 
   if request_token.empty?
