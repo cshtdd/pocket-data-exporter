@@ -4,6 +4,7 @@ require './lib/pocket/api'
 require './lib/pocket/parser'
 require './lib/pocket/formatter'
 require './lib/downloader'
+require './lib/storage/cache'
 
 puts 'Initializing...'
 
@@ -15,7 +16,8 @@ end
 puts 'Configuration Read'
 
 pocket_api = Pocket::Api.new(config.consumer_key, config.debug_enabled)
-downloader = Downloader.new(pocket_api, config.debug_enabled)
+in_memory_cache = Storage::Cache.new
+downloader = Downloader.new(pocket_api, in_memory_cache, config.debug_enabled)
 puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
