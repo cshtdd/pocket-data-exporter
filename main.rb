@@ -38,7 +38,7 @@ get '/export/:out_method' do
 end
 
 get '/raw_data_json/:code' do
-  content_type 'application/json'
+  content_type 'data:application/json'
   request_token = params[:code] || ''
 
   if request_token.empty?
@@ -71,7 +71,7 @@ get '/raw_data_json/:code' do
 end
 
 get '/list_by_tags_json/:code' do
-  content_type 'application/json'
+  content_type 'data:application/json'
   request_token = params[:code] || ''
 
   if request_token.empty?
@@ -106,7 +106,7 @@ get '/list_by_tags_json/:code' do
 end
 
 get '/list_by_tags/:code' do
-  content_type 'text/plain'
+  content_type 'data:text/plain'
   request_token = params[:code] || ''
 
   if request_token.empty?
