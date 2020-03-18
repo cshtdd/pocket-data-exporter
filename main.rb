@@ -32,20 +32,19 @@ get '/export/:out_method' do
   request_token = pocket_api.read_request_token
 
   if request_token.empty?
-    status 500
-    body 'Error Reading Request Token'
+    [400, 'Error Reading Request Token']
   else
-    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/#{out_method}/#{request_token}"
+    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/download/#{request_token}/#{out_method}/"
     redirect auth_url
   end
 end
 
-get '/raw_data_json/:code' do
-  request_token = params[:code] || ''
+get '/download/:request_token/:out_method/' do
+  request_token = params[:request_token] || ''
+  url_suffix = params[:out_method] || ''
   access_token_info = downloader.read_access_token(request_token)
 
   if access_token_info[:error]
-    content_type 'application/json'
     [400, { msg: access_token_info[:message] }.to_json]
   else
     access_token = access_token_info[:access_token]
@@ -53,72 +52,47 @@ get '/raw_data_json/:code' do
     log_access_token_value = '*************' unless config.debug_enabled
     puts "Access Token: #{log_access_token_value}"
 
-    articles_json = pocket_api.read_all_articles_json(access_token)
+    url_id = downloader.save_data(access_token)
 
-    if articles_json.empty?
-      content_type 'application/json'
-      [400, { msg: 'Error Reading Articles' }.to_json]
-    end
-
-    content_type 'data:application/json'
-    articles_json
+    redirect "/data/#{url_id}/#{url_suffix}"
   end
 end
 
-get '/list_by_tags_json/:code' do
-  request_token = params[:code] || ''
-  access_token_info = downloader.read_access_token(request_token)
+get '/data/:url_id/data.json' do
+  content_type 'application/json'
+  article_data_json = downloader.read_data(params[:url_id] || '')
 
-  if access_token_info[:error]
-    content_type 'application/json'
-    [400, { msg: access_token_info[:message] }.to_json]
+  if article_data_json.empty?
+    status 404
   else
-    access_token = access_token_info[:access_token]
-    log_access_token_value = access_token
-    log_access_token_value = '*************' unless config.debug_enabled
-    puts "Access Token: #{log_access_token_value}"
+    article_data_json
+  end
+end
 
-    articles_json = pocket_api.read_all_articles_json(access_token)
+get '/data/:url_id/list_by_tag.json' do
+  content_type 'application/json'
+  article_data_json = downloader.read_data(params[:url_id] || '')
 
-    if articles_json.empty?
-      content_type 'application/json'
-      [400, { msg: 'Error Reading Articles' }.to_json]
-    end
-
-    articles_by_tag = Pocket::Parser.articles_by_tag(articles_json)
-
-    content_type 'data:application/json'
+  if article_data_json.empty?
+    status 404
+  else
+    articles_by_tag = Pocket::Parser.articles_by_tag(article_data_json)
     articles_by_tag.to_json
   end
 end
 
-get '/list_by_tags/:code' do
-  request_token = params[:code] || ''
-  access_token_info = downloader.read_access_token(request_token)
+get '/data/:url_id/list_by_tag.txt' do
+  content_type 'text/plain'
+  article_data_json = downloader.read_data(params[:url_id] || '')
 
-  if access_token_info[:error]
-    content_type 'text/plain'
-    [400, access_token_info[:message]]
+  if article_data_json.empty?
+    status 404
   else
-    access_token = access_token_info[:access_token]
-    log_access_token_value = access_token
-    log_access_token_value = '*************' unless config.debug_enabled
-    puts "Access Token: #{log_access_token_value}"
-
-    articles_json = pocket_api.read_all_articles_json(access_token)
-
-    if articles_json.empty?
-      content_type 'text/plain'
-      [400, 'Error Reading Articles']
-    end
-
-    articles_by_tag = Pocket::Parser.articles_by_tag(articles_json)
+    articles_by_tag = Pocket::Parser.articles_by_tag(article_data_json)
     response_body = ''
     response_body << Pocket::Formatter.unique_dict_values_plaintext(articles_by_tag)
     response_body << "\r\n"
     response_body << Pocket::Formatter.dict_to_plaintext(articles_by_tag)
-
-    content_type 'data:text/plain'
     response_body
   end
 end
