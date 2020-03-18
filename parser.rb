@@ -30,13 +30,33 @@ articles.each do |id, info|
   # puts tag_info
 end
 
+weird_ids = []
+
 articles_by_tag.each do |tag, ids|
   puts tag
 
   ids.each do |id|
-    puts '   ' + articles[id]['resolved_url']
+    # if articles[id].nil? || articles[id]['resolved_url'].nil?
+    #   weird_ids << id
+    # else
+    #   puts '   ' + articles[id]['resolved_url']
+    # end
+
+    article_info = articles[id]
+    if article_info.include?('resolved_url')
+      if article_info['resolved_url'].nil?
+        weird_ids << id
+      else
+        puts '   ' + article_info['resolved_url']
+      end
+    end
   end
 end
 
-# puts articles
+
+
+puts 'Weird articles'
+weird_ids.each do |id|
+  puts "    #{id}"
+end
 
