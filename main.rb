@@ -2,6 +2,7 @@ require 'launchy'
 require 'sinatra'
 require './lib/config'
 require './lib/pocket'
+require './lib/pocket_parser'
 
 puts 'Initializing...'
 
@@ -57,8 +58,10 @@ get '/token/:code' do
         body({ msg: 'Error Reading Articles' }.to_json)
       end
 
+      articles_by_tag = PocketParser.articles_by_tag(articles_json)
+
       status 200
-      body articles_json
+      body articles_by_tag.to_json
     end
   end
 end
