@@ -22,7 +22,7 @@ class Downloader
 
     debug("Access Token: #{access_token}")
 
-    access_token
+    { error: false, access_token: access_token }
   end
 
   private
