@@ -21,14 +21,16 @@
 <body>
 
 <div class="container">
+    <h1>Export Pocket Data</h1>
     <div class="row">
         <div class="col-sm-6">
-            <h1>Export Pocket Data</h1>
-            <a class="btn btn-primary btn-block" target="_blank" href="/export/list.txt">Url List</a>
-            <a class="btn btn-secondary btn-block" target="_blank" href="/export/list_by_tag.txt">Url List by Tags</a>
+            <a class="btn btn-primary btn-block" target="_blank" href="/export/list.txt">Link List</a>
 
-            <h2>JSON Export</h2>
-            <a class="btn btn-light btn-block" target="_blank" href="/export/list_by_tag.json">Url List by Tags</a>
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <a class="btn btn-secondary active" target="_blank" href="/export/list_by_tag.txt">List by Tags</a>
+                <a class="btn btn-secondary" target="_blank" href="/export/list_by_tag.json">.json</a>
+            </div>
+
             <a class="btn btn-light btn-block" target="_blank" href="/export/data.json">Raw Data</a>
         </div>
         <div class="col-sm-6">
