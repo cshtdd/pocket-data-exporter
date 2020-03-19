@@ -2,29 +2,13 @@ require 'json'
 
 module Pocket
   class Parser
-    def self.articles_with_url(data_str)
-      data = JSON.parse(data_str)
-      data['list']
-        .values
-        .filter { |a| a['status'] == '0' }
-        .filter { |a| a.include?('resolved_url') }
-        .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
-    end
+    def self.articles_with_url(data_str, status = :default)
+      api_status = convert_status(status)
 
-    def self.archived_articles_with_url(data_str)
       data = JSON.parse(data_str)
       data['list']
         .values
-        .filter { |a| a['status'] == '1' }
-        .filter { |a| a.include?('resolved_url') }
-        .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
-    end
-
-    def self.deleted_articles_with_url(data_str)
-      data = JSON.parse(data_str)
-      data['list']
-        .values
-        .filter { |a| a['status'] == '2' }
+        .filter { |a| a['status'] == api_status }
         .filter { |a| a.include?('resolved_url') }
         .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
     end
@@ -33,7 +17,7 @@ module Pocket
       articles_by_tag = {}
 
       articles.each do |article|
-        tag_info = article['tags'] || { 'untagged items': nil }
+        tag_info = article['tags'] || {'untagged items': nil}
 
         tag_info.keys.each do |tag|
           unless articles_by_tag.include?(tag)
@@ -51,6 +35,17 @@ module Pocket
       articles
         .map { |article| article['resolved_url'] }
         .uniq
+    end
+
+    def self.convert_status(status)
+      case status
+      when :deleted
+        '2'
+      when :archived
+        '1'
+      else
+        '0'
+      end
     end
   end
 end

@@ -7,7 +7,7 @@ unless File.exist?(file_path)
 end
 
 data_str = File.read(file_path)
-articles = Pocket::Parser.articles_with_url(data_str)
+articles = Pocket::Parser.articles_with_url(data_str, :default)
 article_urls = Pocket::Parser.urls(articles)
 
 puts "Total Count: #{article_urls.length}"
