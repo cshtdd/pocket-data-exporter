@@ -1,6 +1,6 @@
 # Pocket Data Exporter  
   
-**Pocket Data Exporter** export your Pocket data in multiple data formats.  
+Export your Pocket data to multiple formats    
 
 ![Pocket Data Exporter Screenshot](public/img/screenshot.png)
 
