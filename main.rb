@@ -112,11 +112,7 @@ get '/data/:id/list.txt' do
     status 404
   else
     article_list = Pocket::Parser.article_urls(article_data_json)
-    response_body = ''
-    response_body << Pocket::Formatter.total_count(article_list)
-    response_body << "\r\n"
-    response_body << Pocket::Formatter.list_to_plaintext(article_list)
-    response_body
+    haml :array_list, locals: { array: article_list }
   end
 end
 
