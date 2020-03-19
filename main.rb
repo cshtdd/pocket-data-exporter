@@ -76,7 +76,7 @@ get '/data/:id/list_by_tag.json' do
   if article_data_json.empty?
     status 404
   else
-    articles_by_tag = Pocket::Parser.articles_by_tag(article_data_json)
+    articles_by_tag = Pocket::Parser.article_urls_by_tag(article_data_json)
     articles_by_tag.to_json
   end
 end
@@ -104,7 +104,7 @@ get '/data/:id/list_by_tag.txt' do
   if article_data_json.empty?
     status 404
   else
-    articles_by_tag = Pocket::Parser.articles_by_tag(article_data_json)
+    articles_by_tag = Pocket::Parser.article_urls_by_tag(article_data_json)
     response_body = ''
     response_body << Pocket::Formatter.unique_dict_values_plaintext(articles_by_tag)
     response_body << "\r\n"

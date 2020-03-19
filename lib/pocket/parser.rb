@@ -11,7 +11,7 @@ module Pocket
         .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
     end
 
-    def self.articles_by_tag(data_str)
+    def self.article_urls_by_tag(data_str)
       articles_by_tag = {}
 
       articles_with_url(data_str).each do |article|
