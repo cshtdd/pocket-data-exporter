@@ -116,11 +116,7 @@ get '/data/:id/list_by_tag.txt' do
     status 404
   else
     articles_by_tag = Pocket::Parser.article_urls_by_tag(article_data_json)
-    response_body = ''
-    response_body << Pocket::Formatter.total_value_count(articles_by_tag)
-    response_body << "\r\n"
-    response_body << Pocket::Formatter.dict_to_plaintext(articles_by_tag)
-    response_body
+    haml :dict_values_per_key, locals: { dict: articles_by_tag }
   end
 end
 

@@ -1,0 +1,7 @@
+- total_count = dict.values.flatten.uniq.count
+= "Total Count: #{total_count}"
+
+- dict.each do |key, values|
+    = "#{key}"
+    - values.each do |url|
+        = "    #{url}"
