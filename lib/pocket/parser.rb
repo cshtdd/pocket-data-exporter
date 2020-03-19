@@ -27,5 +27,18 @@ module Pocket
 
       articles_by_tag
     end
+
+    def self.article_urls(data_str)
+      data = JSON.parse(data_str)
+      articles = data['list']
+
+      articles
+        .values
+        .filter { |a| a['status'] == '0' }
+        .filter { |a| a.include?('resolved_url') }
+        .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
+        .map { |a| a['resolved_url'] }
+        .uniq
+    end
   end
 end

@@ -81,6 +81,22 @@ get '/data/:id/list_by_tag.json' do
   end
 end
 
+get '/data/:id/list.txt' do
+  content_type 'text/plain'
+  article_data_json = downloader.read_data params[:id]
+
+  if article_data_json.empty?
+    status 404
+  else
+    article_list = Pocket::Parser.article_urls(article_data_json)
+    response_body = ''
+    response_body << Pocket::Formatter.total_count(article_list)
+    response_body << "\r\n"
+    response_body << Pocket::Formatter.list_to_plaintext(article_list)
+    response_body
+  end
+end
+
 get '/data/:id/list_by_tag.txt' do
   content_type 'text/plain'
   article_data_json = downloader.read_data params[:id]

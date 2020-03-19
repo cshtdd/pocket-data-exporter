@@ -5,6 +5,10 @@ module Pocket
       "Total Count: #{total_count}"
     end
 
+    def self.total_count(array)
+      "Total Count: #{array.length}"
+    end
+
     def self.dict_to_plaintext(hash)
       result = ''
 
@@ -17,6 +21,10 @@ module Pocket
       end
 
       result
+    end
+
+    def self.list_to_plaintext(array)
+      array.join("\r\n")
     end
   end
 end

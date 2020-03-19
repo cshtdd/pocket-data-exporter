@@ -26,7 +26,7 @@ dotenv thin --threaded start
 5- Get a list of articles per tag  
 
 ```bash
-ruby parser.rb ~/Downloads/pocket_data.json
+ruby ./utils/parser.rb ~/Downloads/pocket_data.json
 ```
 
 # Docs  
