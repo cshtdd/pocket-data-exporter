@@ -38,10 +38,10 @@ module Pocket
     end
 
     def self.convert_status(status)
-      case status
-      when :deleted
+      case (status || '').to_s.downcase
+      when 'deleted'
         '2'
-      when :archived
+      when 'archived'
         '1'
       else
         '0'
