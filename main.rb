@@ -26,6 +26,15 @@ get '/' do
   send_file File.expand_path('index.html', settings.public_dir)
 end
 
+get '/status' do
+  downloader.storage_driver.save('status', 'yes')
+  if downloader.storage_driver.read('status') == 'yes'
+    status 200
+  else
+    status 500
+  end
+end
+
 get '/export/:data_method' do
   puts 'Retrieving auth token...'
   data_method = params[:data_method]
