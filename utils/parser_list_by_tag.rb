@@ -1,5 +1,4 @@
 require './lib/pocket/parser'
-require './lib/pocket/formatter'
 
 file_path = ARGV[0] || ''
 unless File.exist?(file_path)
@@ -10,5 +9,13 @@ end
 data_str = File.read(file_path)
 articles_by_tag = Pocket::Parser.article_urls_by_tag(data_str)
 
-puts Pocket::Formatter.total_value_count(articles_by_tag)
-puts Pocket::Formatter.dict_to_plaintext(articles_by_tag)
+total_count = articles_by_tag.values.flatten.uniq.count
+puts "Total Count: #{total_count}"
+
+articles_by_tag.each do |key, values|
+  puts key.to_s
+
+  values.each do |url|
+    puts "    #{url}"
+  end
+end

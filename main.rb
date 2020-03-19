@@ -2,7 +2,6 @@ require 'sinatra'
 require './lib/config'
 require './lib/pocket/api'
 require './lib/pocket/parser'
-require './lib/pocket/formatter'
 require './lib/downloader'
 require './lib/storage/cache'
 
