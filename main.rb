@@ -22,6 +22,8 @@ puts 'Pocket Api Initialized'
 
 puts 'Starting web server...'
 
+set :static_cache_control, [:public, max_age: 300]
+
 get '/' do
   send_file File.expand_path('index.html', settings.public_dir)
 end
