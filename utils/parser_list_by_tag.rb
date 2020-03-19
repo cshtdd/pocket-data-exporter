@@ -10,5 +10,5 @@ end
 data_str = File.read(file_path)
 articles_by_tag = Pocket::Parser.article_urls_by_tag(data_str)
 
-puts Pocket::Formatter.unique_dict_values_plaintext(articles_by_tag)
+puts Pocket::Formatter.total_value_count(articles_by_tag)
 puts Pocket::Formatter.dict_to_plaintext(articles_by_tag)

@@ -1,6 +1,6 @@
 module Pocket
   class Formatter
-    def self.unique_dict_values_plaintext(hash)
+    def self.total_value_count(hash)
       total_count = hash.values.flatten.uniq.count
       "Total Count: #{total_count}"
     end
