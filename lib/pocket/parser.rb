@@ -2,7 +2,7 @@ require 'json'
 
 module Pocket
   class Parser
-    def self.articles_with_url(data_str, status = :default)
+    def self.articles(data_str, status = :default)
       api_status = convert_status(status)
 
       data = JSON.parse(data_str)

@@ -36,20 +36,23 @@ get '/status' do
   end
 end
 
-get '/export/:data_method' do
+get '/export/:status/:data_method' do
   puts 'Retrieving auth token...'
+  status = params[:status]
   data_method = params[:data_method]
   request_token = pocket_api.read_request_token
 
   if request_token.empty?
     [400, 'Error Reading Request Token']
   else
-    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/auth/#{request_token}/#{data_method}/"
+    auth_url = "https://getpocket.com/auth/authorize?request_token=#{request_token}&redirect_uri=#{config.server_url}/auth/#{status}/#{request_token}/#{data_method}/"
     redirect auth_url
   end
 end
 
-get '/auth/:request_token/:data_method/' do
+get '/auth/:status/:request_token/:data_method/' do
+  puts 'Retrieving access token...'
+  status = params[:status]
   request_token = params[:request_token]
   url_suffix = params[:data_method]
   access_token_info = downloader.read_access_token(request_token)
@@ -64,11 +67,11 @@ get '/auth/:request_token/:data_method/' do
 
     url_id = downloader.save_data(access_token)
 
-    redirect "/data/#{url_id}/#{url_suffix}"
+    redirect "/data/#{url_id}/#{status}/#{url_suffix}"
   end
 end
 
-get '/data/:id/data.json' do
+get '/data/:id/:status_ignored/data.json' do
   content_type 'application/json'
   article_data_json = downloader.read_data params[:id]
 
@@ -79,40 +82,40 @@ get '/data/:id/data.json' do
   end
 end
 
-get '/data/:id/list_by_tag.json' do
+get '/data/:id/:status/list_by_tag.json' do
   content_type 'application/json'
   article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
   else
-    articles = Pocket::Parser.articles_with_url(article_data_json, :default)
+    articles = Pocket::Parser.articles(article_data_json, params[:status])
     articles_by_tag = Pocket::Parser.urls_by_tag(articles)
     articles_by_tag.to_json
   end
 end
 
-get '/data/:id/list_by_tag.txt' do
+get '/data/:id/:status/list_by_tag.txt' do
   content_type 'text/plain'
   article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
   else
-    articles = Pocket::Parser.articles_with_url(article_data_json, :default)
+    articles = Pocket::Parser.articles(article_data_json, params[:status])
     articles_by_tag = Pocket::Parser.urls_by_tag(articles)
     haml :dict_values_per_key, locals: { dict: articles_by_tag }
   end
 end
 
-get '/data/:id/list.txt' do
+get '/data/:id/:status/list.txt' do
   content_type 'text/plain'
   article_data_json = downloader.read_data params[:id]
 
   if article_data_json.empty?
     status 404
   else
-    articles = Pocket::Parser.articles_with_url(article_data_json, :default)
+    articles = Pocket::Parser.articles(article_data_json, params[:status])
     article_list = Pocket::Parser.urls(articles)
     haml :array_list, locals: { array: article_list }
   end
