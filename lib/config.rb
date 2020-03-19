@@ -7,7 +7,7 @@ class Config
     result = Config.new
 
     result.consumer_key = ENV['CONSUMER_KEY'] || ''
-    result.server_url = ENV['SERVER_URL'] || 'http://localhost:4567'
+    result.server_url = ENV['SERVER_URL'] || 'http://localhost:3000'
     result.debug_enabled = (ENV['DEBUG'] || 'false').downcase == 'true'
 
     result

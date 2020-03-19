@@ -18,7 +18,7 @@ EOF
 3- Run the app  
 
 ```bash
-dotenv ruby main.rb
+dotenv thin --threaded start
 ```
 
 4- Follow the instructions. Download the json file  
