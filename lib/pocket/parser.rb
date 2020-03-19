@@ -11,10 +11,10 @@ module Pocket
         .reject { |a| a['resolved_url'].nil? || a['resolved_url'].empty? }
     end
 
-    def self.article_urls_by_tag(data_str)
+    def self.urls_by_tag(articles)
       articles_by_tag = {}
 
-      articles_with_url(data_str).each do |article|
+      articles.each do |article|
         tag_info = article['tags'] || { 'untagged items': nil }
 
         tag_info.keys.each do |tag|
@@ -29,8 +29,8 @@ module Pocket
       articles_by_tag
     end
 
-    def self.article_urls(data_str)
-      articles_with_url(data_str)
+    def self.urls(articles)
+      articles
         .map { |article| article['resolved_url'] }
         .uniq
     end

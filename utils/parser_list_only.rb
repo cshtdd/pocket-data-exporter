@@ -7,7 +7,8 @@ unless File.exist?(file_path)
 end
 
 data_str = File.read(file_path)
-article_urls = Pocket::Parser.article_urls(data_str)
+articles = Pocket::Parser.articles_with_url(data_str)
+article_urls = Pocket::Parser.urls(articles)
 
 puts "Total Count: #{article_urls.length}"
 article_urls.each do |s|

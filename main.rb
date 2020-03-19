@@ -86,7 +86,8 @@ get '/data/:id/list_by_tag.json' do
   if article_data_json.empty?
     status 404
   else
-    articles_by_tag = Pocket::Parser.article_urls_by_tag(article_data_json)
+    articles = Pocket::Parser.articles_with_url(article_data_json)
+    articles_by_tag = Pocket::Parser.urls_by_tag(articles)
     articles_by_tag.to_json
   end
 end
@@ -98,7 +99,8 @@ get '/data/:id/list_by_tag.txt' do
   if article_data_json.empty?
     status 404
   else
-    articles_by_tag = Pocket::Parser.article_urls_by_tag(article_data_json)
+    articles = Pocket::Parser.articles_with_url(article_data_json)
+    articles_by_tag = Pocket::Parser.urls_by_tag(articles)
     haml :dict_values_per_key, locals: { dict: articles_by_tag }
   end
 end
@@ -110,7 +112,8 @@ get '/data/:id/list.txt' do
   if article_data_json.empty?
     status 404
   else
-    article_list = Pocket::Parser.article_urls(article_data_json)
+    articles = Pocket::Parser.articles_with_url(article_data_json)
+    article_list = Pocket::Parser.urls(articles)
     haml :array_list, locals: { array: article_list }
   end
 end
