@@ -1,7 +1,6 @@
 # Pocket Data Exporter  
-
-Pocket can export user data in a single html.  
-**Pocket Data Exporter** can export the data in a richer array of formats.  
+  
+**Pocket Data Exporter** export your Pocket data in multiple data formats.  
 
 ![Pocket Data Exporter Screenshot](public/img/screenshot.png)
 
